@@ -5,7 +5,7 @@ import ButtonRectangle from '../../components/Buttons/ButtonRectangle'
 import Layout from '../../components/Layout'
 import Tag from '../../components/Tag'
 import Text from '../../components/Text'
-import { useGetProfileById } from '../../hooks/profile'
+import { useGetProfileById, useGetOwnProfile } from '../../hooks/profile'
 import useAuth from '../../hooks/useAuth'
 import useProfiles from '../../hooks/useProfiles'
 import { useGetUserById } from '../../hooks/user'
@@ -13,6 +13,8 @@ import { scholarityLabel } from '../../utils/constants/project'
 import { localDate } from '../../utils/conversions'
 import { translate } from '../../utils/translations'
 import './styles.css'
+import '../JobList/style.css'
+import JobCard from '../../components/JobCard'
 
 // Component that renders the page to see a profile details
 function ViewProfile() {
@@ -35,7 +37,8 @@ function ViewProfile() {
     () => parseInt(userId, 10) === parseInt(params.id, 10),
     [userId, params]
   )
-
+  const bestJobs = useGetOwnProfile(isOwnProfile && params.id)
+  console.log(bestJobs)
   const remoteUser = useGetUserById(isOwnProfile && params.id)
   const remoteProfile = useGetProfileById(
     isOwnProfile && remoteUser && remoteUser.profileId,
@@ -157,7 +160,7 @@ function ViewProfile() {
   const renderInfoText = (text) => (
     <Text className="is-bold is-blue" text={text} size={24} />
   )
-
+/*eslint-disable */
   return (
     <Layout isFinalPage>
       <div className="view-profile">
@@ -169,6 +172,20 @@ function ViewProfile() {
             : renderInfoText('Carregando usuário e perfil...')}
         </div>
       </div>
+      <section id="main">
+        <div id="label">
+          <span>Vagas Recomendadas</span>
+        </div>
+        <div id="jobs-container">
+          <div id="jobs">
+            <div className="wrap">
+              {bestJobs.length > 0
+                ? bestJobs.map((job) => <JobCard data={job} key={job.id} />)
+                : false}
+            </div>
+          </div>
+        </div>
+      </section>
     </Layout>
   )
 }

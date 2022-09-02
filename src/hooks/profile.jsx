@@ -56,6 +56,27 @@ export const useGetProfileById = (id, displayError = true) => {
   return profile
 }
 
+export const useGetOwnProfile = (id) => {
+  const navigate = useNavigate()
+  const [bestJobs, setBestJobs] = useState([])
+
+  useEffect(async () => {
+    const response = await api.get(`/perfis/meuperfil/${id}`)
+
+    if (response.data.message) {
+      if (response.data.error) {
+        toast.error(response.data.message)
+        handleNotAuthorized(response, navigate)
+        return
+      }
+      toast.success(response.data.message)
+    }
+
+    setBestJobs(response.data)
+  }, [id])
+  return bestJobs
+}
+
 export const useProfileRoutes = () => {
   const navigate = useNavigate()
 
