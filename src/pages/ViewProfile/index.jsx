@@ -38,7 +38,6 @@ function ViewProfile() {
     [userId, params]
   )
   const bestJobs = useGetOwnProfile(isOwnProfile && params.id)
-  console.log(bestJobs)
   const remoteUser = useGetUserById(isOwnProfile && params.id)
   const remoteProfile = useGetProfileById(
     isOwnProfile && remoteUser && remoteUser.profileId,

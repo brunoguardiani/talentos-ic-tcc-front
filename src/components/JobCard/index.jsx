@@ -6,6 +6,7 @@ import './style.css'
 import LinesEllipsis from 'react-lines-ellipsis'
 import { Button } from '../FormElements'
 import { localDate } from '../../utils/conversions'
+import { HOME_URL } from '../../api'
 
 function JobCard({ data }) {
   const { title, description, site, endingDate, id } = data
@@ -33,7 +34,7 @@ function JobCard({ data }) {
           label="Ver mais detalhes"
           scheme="blue"
           onClick={() => {
-            document.location.href = `${document.location.href}vagas/${id}`
+            document.location.href = `${HOME_URL}vagas/${id}`
           }}
         />
       </div>
