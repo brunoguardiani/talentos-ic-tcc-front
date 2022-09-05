@@ -14,7 +14,7 @@ import { localDate } from '../../utils/conversions'
 import { translate } from '../../utils/translations'
 import './styles.css'
 import '../JobList/style.css'
-import JobCard from '../../components/JobCard'
+import JobRecommendationCard from '../../components/JobRecommendationCard'
 
 // Component that renders the page to see a profile details
 function ViewProfile() {
@@ -179,7 +179,7 @@ function ViewProfile() {
           <div id="jobs">
             <div className="wrap">
               {bestJobs.length > 0
-                ? bestJobs.map((job) => <JobCard data={job} key={job.id} />)
+                ? bestJobs.map((job) => <JobRecommendationCard data={job} key={job.id} />)
                 : false}
             </div>
           </div>
