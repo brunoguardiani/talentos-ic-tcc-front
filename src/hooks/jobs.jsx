@@ -134,7 +134,32 @@ export const useJobRoutes = () => {
     return response.data
   }
 
-  return { createJob, updateJob, deleteJob, applyToJob }
+  const feedbackJobs = async (jobId, status) => {
+    const response = await api.put(`/vagas/${jobId}`, {
+      status,
+    })
+
+    if (response.data.message) {
+      if (response.data.error) toast.error(response.data.message)
+      else toast.success(response.data.message)
+    }
+  }
+
+  return { createJob, updateJob, deleteJob, applyToJob, feedbackJobs }
+}
+
+export const getFeedbackStatus = (id) => {
+  const [status, setStatus] = useState('')
+
+  useEffect(async () => {
+    const response = await api.get(`/vagas/feeback/${id}`)
+    if (response.data.error && response.data.message) {
+      toast.error(response.data.message)
+      return
+    }
+    setStatus(response.data.status)
+  }, [id])
+  return status
 }
 
 export const useGetJobs = (pageNumber, itemsPerPage, filters) => {

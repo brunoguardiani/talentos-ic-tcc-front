@@ -9,9 +9,18 @@ import { faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons'
 import { Button } from '../FormElements'
 import { localDate } from '../../utils/conversions'
 import { HOME_URL } from '../../api'
+import { useJobRoutes /* getFeedbackStatus */ } from '../../hooks/jobs'
 
 function JobRecommendationCard({ data }) {
   const { title, description, site, endingDate, id } = data
+  const { feedbackJobs } = useJobRoutes()
+  const likeFeedback = () => {
+    feedbackJobs(id, 'like')
+  }
+  const dislikeFeedback = () => {
+    feedbackJobs(id, 'dislike')
+  }
+  // const feedbackStatus = getFeedbackStatus(id)
 
   return (
     <div className="job">
@@ -43,11 +52,13 @@ function JobRecommendationCard({ data }) {
         {/* eslint-disable */}
         <button  
           className='like-button'
+          onClick={likeFeedback}
           >
           <FontAwesomeIcon icon={faThumbsUp} size='lg'/>
         </button>
         <button 
-        className='dislike-button'
+          className='dislike-button'
+          onClick={dislikeFeedback}
         >
           <FontAwesomeIcon icon={faThumbsDown} size='lg'/>
         </button>
