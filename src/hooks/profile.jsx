@@ -1,11 +1,11 @@
 /* eslint-disable import/prefer-default-export */
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import api from '../api'
 import { handleNotAuthorized } from '../utils/requests'
 
-export const useGetProfiles = (pageNumber, itemsPerPage, filters) => {
+export const useGetProfiles = async (pageNumber, itemsPerPage, filters) => {
   const [profiles, setProfiles] = useState([])
   const [totalPages, setTotalPages] = useState(0)
   const [count, setCount] = useState(0)
@@ -22,59 +22,53 @@ export const useGetProfiles = (pageNumber, itemsPerPage, filters) => {
     return query.join('&')
   }
 
-  useEffect(async () => {
-    const response = await api.get(`/perfis?${buildQuery()}`)
+  const response = await api.get(`/perfis?${buildQuery()}`)
 
-    if (response.data.error && response.data.message) {
-      toast.error(response.data.message)
-      return
-    }
+  if (response.data.error && response.data.message) {
+    toast.error(response.data.message)
+    return {}
+  }
 
-    setProfiles(response.data.rows)
-    setCount(response.data.count)
-    setTotalPages(Math.ceil(response.data.count / itemsPerPage))
-  }, [pageNumber, itemsPerPage, filters])
+  setProfiles(response.data.rows)
+  setCount(response.data.count)
+  setTotalPages(Math.ceil(response.data.count / itemsPerPage))
 
   return { profiles, totalPages, count }
 }
 
-export const useGetProfileById = (id, displayError = true) => {
+export const useGetProfileById = async (id, displayError = true) => {
   const [profile, setProfile] = useState()
 
-  useEffect(async () => {
-    if (id === -1) return
-    const response = await api.get(`/perfis/${id}`)
+  if (id === -1) return {}
+  const response = await api.get(`/perfis/${id}`)
 
-    if (response.data.message) {
-      if (displayError) toast.error(response.data.message)
-      return
-    }
+  if (response.data.message) {
+    if (displayError) toast.error(response.data.message)
+    return {}
+  }
 
-    setProfile(response.data)
-  }, [id])
+  setProfile(response.data)
 
-  return profile
+  return { profile }
 }
 
-export const useGetOwnProfile = (id) => {
+export const useGetOwnProfile = async (id) => {
   const navigate = useNavigate()
   const [bestJobs, setBestJobs] = useState([])
 
-  useEffect(async () => {
-    const response = await api.get(`/perfis/meuperfil/${id}`)
+  const response = await api.get(`/perfis/meuperfil/${id}`)
 
-    if (response.data.message) {
-      if (response.data.error) {
-        toast.error(response.data.message)
-        handleNotAuthorized(response, navigate)
-        return
-      }
-      toast.success(response.data.message)
+  if (response.data.message) {
+    if (response.data.error) {
+      toast.error(response.data.message)
+      handleNotAuthorized(response, navigate)
+      return {}
     }
+    toast.success(response.data.message)
+  }
 
-    setBestJobs(response.data)
-  }, [id])
-  return bestJobs
+  setBestJobs(response.data)
+  return { bestJobs }
 }
 
 export const useProfileRoutes = () => {

@@ -1,31 +1,28 @@
 /* eslint-disable import/prefer-default-export */
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import api from '../api'
 import { handleNotAuthorized } from '../utils/requests'
 
-export const useGetTechnologies = () => {
+export const useGetTechnologies = async () => {
   const navigate = useNavigate()
 
   const [technologies, setTechnologies] = useState([])
+  const response = await api.get(`/tecnologias`)
 
-  useEffect(async () => {
-    const response = await api.get(`/tecnologias`)
-
-    if (response.data.message) {
-      if (response.data.error) {
-        toast.error(response.data.message)
-        handleNotAuthorized(response, navigate)
-        return
-      }
-      toast.success(response.data.message)
+  if (response.data.message) {
+    if (response.data.error) {
+      toast.error(response.data.message)
+      handleNotAuthorized(response, navigate)
+      return {}
     }
+    toast.success(response.data.message)
+  }
 
-    setTechnologies(response.data.rows)
-  }, [])
+  setTechnologies(response.data.rows)
 
-  return technologies
+  return { technologies }
 }
 
 export const useTechnologyRoutes = () => {

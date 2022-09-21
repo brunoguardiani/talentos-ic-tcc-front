@@ -1,11 +1,11 @@
 /* eslint-disable import/prefer-default-export */
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import api from '../api'
 import { handleNotAuthorized } from '../utils/requests'
 
-export const useGetEmailLists = () => {
+export const useGetEmailLists = async () => {
   const navigate = useNavigate()
   const [emailLists, setEmailLists] = useState([])
 
@@ -13,39 +13,35 @@ export const useGetEmailLists = () => {
 
   const refresh = () => setFetch(true)
 
-  useEffect(async () => {
-    if (!fetch) return
+  if (!fetch) return
 
-    const response = await api.get(`/email-list`)
+  const response = await api.get(`/email-list`)
 
-    if (response.data.message && response.data.error) {
-      toast.error(response.data.message)
-      handleNotAuthorized(response, navigate)
-      return
-    }
+  if (response.data.message && response.data.error) {
+    toast.error(response.data.message)
+    handleNotAuthorized(response, navigate)
+    return
+  }
 
-    setFetch(false)
-    setEmailLists(response.data.rows)
-  }, [fetch])
+  setFetch(false)
+  setEmailLists(response.data.rows)
 
   return { emailLists, refresh }
 }
 
-export const useGetEmailListState = () => {
+export const useGetEmailListState = async () => {
   const navigate = useNavigate()
   const [state, setState] = useState()
 
-  useEffect(async () => {
-    const response = await api.get(`/email-list/verificacao`)
+  const response = await api.get(`/email-list/verificacao`)
 
-    if (response.data.message && response.data.error) {
-      toast.error(response.data.message)
-      handleNotAuthorized(response, navigate)
-      return
-    }
+  if (response.data.message && response.data.error) {
+    toast.error(response.data.message)
+    handleNotAuthorized(response, navigate)
+    return {}
+  }
 
-    setState(response.data.status)
-  }, [])
+  setState(response.data.status)
 
   return { state }
 }

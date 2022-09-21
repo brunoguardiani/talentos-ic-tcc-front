@@ -1,32 +1,30 @@
 /* eslint-disable import/prefer-default-export */
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import api from '../api'
 import { assignDefined } from '../utils/object'
 import { handleNotAuthorized } from '../utils/requests'
 
-export const useGetUserById = (id) => {
+export const useGetUserById = async (id) => {
   const navigate = useNavigate()
   const [user, setUser] = useState()
 
-  useEffect(async () => {
-    if (!id) return
-    const response = await api.get(`/usuarios/${id}`)
+  if (!id) return {}
+  const response = await api.get(`/usuarios/${id}`)
 
-    if (response.data.message) {
-      if (response.data.error) {
-        toast.error(response.data.message)
-        handleNotAuthorized(response, navigate)
-        return
-      }
-      toast.success(response.data.message)
+  if (response.data.message) {
+    if (response.data.error) {
+      toast.error(response.data.message)
+      handleNotAuthorized(response, navigate)
+      return {}
     }
+    toast.success(response.data.message)
+  }
 
-    setUser(response.data)
-  }, [id])
+  setUser(response.data)
 
-  return user
+  return { user }
 }
 
 export const useGetCreatedJobs = (userId) => {
@@ -50,10 +48,6 @@ export const useGetCreatedJobs = (userId) => {
     setCreatedJobs(response.data.rows)
     setCount(response.data.count)
   }
-
-  useEffect(() => {
-    getCreatedJobs()
-  }, [userId])
 
   return { getCreatedJobs, createdJobs, count }
 }
@@ -79,10 +73,6 @@ export const useGetAppliedJobs = (userId) => {
     setAppliedJobs(response.data.rows)
     setCount(response.data.count)
   }
-
-  useEffect(() => {
-    getAppliedJobs()
-  }, [userId])
 
   return { getAppliedJobs, appliedJobs, count }
 }

@@ -89,6 +89,7 @@
   background-color: white;
   color: #39ac39;
   box-shadow: inset 300px 0 0 0 white;
+  border: 1px solid #39ac39;
 }
 
 .dislike-button {
@@ -107,5 +108,23 @@
   background-color: red;
   color: white;
   box-shadow: inset 300px 0 0 0 red;
+}
+
+.dislike-button-pressed {
+  width: 40px;
+  height: 40px;
+  border-radius: 7px;
+  background-color: red;
+  color: white;
+  border: 1px solid white;
+  transition: 0.3s ease-in-out;
+  outline: none;
+  box-shadow: inset 0 0 0 white;
+}
+
+.dislike-button-pressed:hover{
+  background-color: white;
+  color: red;
+  box-shadow: inset 300px 0 0 0 white;
 }
 

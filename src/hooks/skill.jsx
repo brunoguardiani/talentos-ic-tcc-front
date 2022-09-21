@@ -1,30 +1,28 @@
 /* eslint-disable import/prefer-default-export */
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import api from '../api'
 import { handleNotAuthorized } from '../utils/requests'
 
-export const useGetSkills = () => {
+export const useGetSkills = async () => {
   const navigate = useNavigate()
   const [skills, setSkills] = useState([])
 
-  useEffect(async () => {
-    const response = await api.get(`/habilidades`)
+  const response = await api.get(`/habilidades`)
 
-    if (response.data.message) {
-      if (response.data.error) {
-        toast.error(response.data.message)
-        handleNotAuthorized(response, navigate)
-        return
-      }
-      toast.success(response.data.message)
+  if (response.data.message) {
+    if (response.data.error) {
+      toast.error(response.data.message)
+      handleNotAuthorized(response, navigate)
+      return {}
     }
+    toast.success(response.data.message)
+  }
 
-    setSkills(response.data.rows)
-  }, [])
+  setSkills(response.data.rows)
 
-  return skills
+  return { skills }
 }
 
 export const useSkillRoutes = () => {

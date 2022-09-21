@@ -168,8 +168,8 @@ function JobList() {
           <div id="jobs">
             {filterTags()}
             <div className="wrap">
-              {jobs.length > 0
-                ? jobs.map((job) => <JobCard data={job} key={job.id} />)
+              {jobs?.length > 0
+                ? jobs?.map((job) => <JobCard data={job} key={job.id} />)
                 : false}
             </div>
             {count > 0 ? (

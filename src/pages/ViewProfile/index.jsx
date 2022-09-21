@@ -159,7 +159,7 @@ function ViewProfile() {
   const renderInfoText = (text) => (
     <Text className="is-bold is-blue" text={text} size={24} />
   )
-/*eslint-disable */
+  /*eslint-disable */
   return (
     <Layout isFinalPage>
       <div className="view-profile">
@@ -178,8 +178,10 @@ function ViewProfile() {
         <div id="jobs-container">
           <div id="jobs">
             <div className="wrap">
-              {bestJobs.length > 0
-                ? bestJobs.map((job) => <JobRecommendationCard data={job} key={job.id} />)
+              {bestJobs?.length > 0
+                ? bestJobs.map((job) => (
+                    <JobRecommendationCard data={job} key={job.id} />
+                  ))
                 : false}
             </div>
           </div>
