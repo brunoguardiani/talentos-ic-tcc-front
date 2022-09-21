@@ -1,6 +1,6 @@
 /* eslint-disable react/style-prop-object */
 /* eslint-disable no-console */
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import './style.css'
 import LinesEllipsis from 'react-lines-ellipsis'
@@ -9,18 +9,82 @@ import { faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons'
 import { Button } from '../FormElements'
 import { localDate } from '../../utils/conversions'
 import { HOME_URL } from '../../api'
-import { useJobRoutes /* getFeedbackStatus */ } from '../../hooks/jobs'
+import { useJobRoutes, getFeedbackStatus } from '../../hooks/jobs'
 
 function JobRecommendationCard({ data }) {
   const { title, description, site, endingDate, id } = data
   const { feedbackJobs } = useJobRoutes()
   const likeFeedback = () => {
     feedbackJobs(id, 'like')
+    window.location.reload()
   }
   const dislikeFeedback = () => {
     feedbackJobs(id, 'dislike')
+    window.location.reload()
   }
-  // const feedbackStatus = getFeedbackStatus(id)
+  const removeFeedback = () => {
+    window.location.reload()
+  }
+
+  const [feedbackStatus, setFeedbackStatus] = useState('')
+  const status = getFeedbackStatus(id)
+  useEffect(() => {
+    setFeedbackStatus(status)
+  }, [status])
+
+  const renderNeutro = () => {
+    return (
+      <>
+        <button type="button" className="like-button" onClick={likeFeedback}>
+          <FontAwesomeIcon icon={faThumbsUp} size="lg" />
+        </button>
+        <button
+          type="button"
+          className="dislike-button"
+          onClick={dislikeFeedback}
+        >
+          <FontAwesomeIcon icon={faThumbsDown} size="lg" />
+        </button>
+      </>
+    )
+  }
+  const renderLike = () => {
+    return (
+      <>
+        <button
+          type="button"
+          className="like-button-pressed"
+          onClick={removeFeedback}
+        >
+          <FontAwesomeIcon icon={faThumbsUp} size="lg" />
+        </button>
+        <button
+          type="button"
+          className="dislike-button"
+          onClick={dislikeFeedback}
+        >
+          <FontAwesomeIcon icon={faThumbsDown} size="lg" />
+        </button>
+      </>
+    )
+  }
+
+  const renderDislike = () => {
+    return (
+      <>
+        <button type="button" className="like-button" onClick={likeFeedback}>
+          <FontAwesomeIcon icon={faThumbsUp} size="lg" />
+        </button>
+        <button
+          type="button"
+          className="dislike-button-pressed"
+          onClick={removeFeedback}
+        >
+          <FontAwesomeIcon icon={faThumbsDown} size="lg" />
+        </button>
+      </>
+    )
+  }
 
   return (
     <div className="job">
@@ -50,18 +114,12 @@ function JobRecommendationCard({ data }) {
         }}
       >
         {/* eslint-disable */}
-        <button  
-          className='like-button'
-          onClick={likeFeedback}
-          >
-          <FontAwesomeIcon icon={faThumbsUp} size='lg'/>
-        </button>
-        <button 
-          className='dislike-button'
-          onClick={dislikeFeedback}
-        >
-          <FontAwesomeIcon icon={faThumbsDown} size='lg'/>
-        </button>
+        {console.log('Esse e o feedbackstatus', feedbackStatus)}
+        {feedbackStatus === 'neutro'
+          ? renderNeutro()
+          : feedbackStatus === 'dislike'
+          ? renderDislike()
+          : renderLike()}
       </div>
       <div>
         <Button

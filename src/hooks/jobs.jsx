@@ -152,7 +152,7 @@ export const getFeedbackStatus = (id) => {
   const [status, setStatus] = useState('')
 
   useEffect(async () => {
-    const response = await api.get(`/vagas/feeback/${id}`)
+    const response = await api.get(`/vagas/feedback/${id}`)
     if (response.data.error && response.data.message) {
       toast.error(response.data.message)
       return
