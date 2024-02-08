@@ -10,6 +10,7 @@ export const useGetJobById = (id) => {
   const [user, setUser] = useState()
   const [jobId, setJobId] = useState()
   const [userId, setUserId] = useState()
+  const [profiles, setProfiles] = useState()
 
   useEffect(async () => {
     if (!id) return
@@ -24,9 +25,10 @@ export const useGetJobById = (id) => {
     setUser(response.data.user)
     setJobId(response.data.jobId)
     setUserId(response.data.userId)
+    setProfiles(response.data.recmd_profiles)
   }, [id])
 
-  return { job, user, jobId, userId }
+  return { job, user, jobId, userId, profiles }
 }
 
 export const useJobRoutes = () => {
@@ -157,7 +159,7 @@ export const getFeedbackStatus = (id) => {
       toast.error(response.data.message)
       return
     }
-    setStatus(response.data.status)
+    setStatus(response.data)
   }, [id])
   return status
 }

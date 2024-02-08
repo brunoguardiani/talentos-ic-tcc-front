@@ -24,6 +24,7 @@ function JobRecommendationCard({ data }) {
   }
   const removeFeedback = () => {
     window.location.reload()
+    feedbackJobs(id, 'neutro')
   }
 
   const [feedbackStatus, setFeedbackStatus] = useState('')

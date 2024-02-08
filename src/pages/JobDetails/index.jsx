@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useMemo, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useGetJobById, useJobRoutes } from '../../hooks/jobs'
@@ -15,6 +16,9 @@ import { translate } from '../../utils/translations'
 import ConfirmModal from '../../components/Modals/ConfirmModal'
 import useAuth from '../../hooks/useAuth'
 import { useGetAppliedJobs } from '../../hooks/user'
+import ProfileCard from '../ProfilesList/ProfileCard'
+import '../ProfilesList/style.css'
+import '../ProfilesList/ProfileCard/style.css'
 
 // Component that renders the page to see a job details or apply to it
 function JobDetails() {
@@ -23,7 +27,7 @@ function JobDetails() {
 
   const { userId } = useAuth()
   const { applyToJob } = useJobRoutes()
-  const { job, user, userId: jobUserId } = useGetJobById(params.id)
+  const { job, user, userId: jobUserId, profiles } = useGetJobById(params.id)
 
   const { appliedJobs } = useGetAppliedJobs(userId)
 
@@ -93,6 +97,7 @@ function JobDetails() {
         <div className="card detail-card">
           {job && user ? (
             <>
+              {console.log(profiles)}
               <div className="detail-top-container">
                 <div>
                   <Text
@@ -179,6 +184,19 @@ function JobDetails() {
           )}
         </div>
       </div>
+      <section id="main">
+        <div id="label">
+          <span>Perfis recomendados</span>
+        </div>
+
+        <div id="profiles">
+          <div className="wrap">
+            {profiles?.map((profile) => (
+              <ProfileCard key={profile.id} profile={profile} />
+            ))}
+          </div>
+        </div>
+      </section>
     </Layout>
   )
 }
